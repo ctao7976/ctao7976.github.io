@@ -1,0 +1,180 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>智驾学习 | 小陈的博客</title><meta name="author" content="小陈"><meta name="copyright" content="小陈"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="雷达相机融合建图 - RTAB-Map1、轮式里程计每次启动底盘前都执行一下1234567891011121314151617source install&#x2F;setup.bashsudo busybox devmem 0x0c303018 w 0xc458sudo busybox devmem 0x0c303010 w 0xc400sudo busybox devmem 0x0c303008 w 0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="智驾学习">
+<meta property="og:url" content="http://ctao7976.github.io/2025/12/19/%E9%9B%B7%E8%BE%BE%E7%9B%B8%E6%9C%BA%E8%9E%8D%E5%90%88%E5%BB%BA%E5%9B%BE/index.html">
+<meta property="og:site_name" content="小陈的博客">
+<meta property="og:description" content="雷达相机融合建图 - RTAB-Map1、轮式里程计每次启动底盘前都执行一下1234567891011121314151617source install&#x2F;setup.bashsudo busybox devmem 0x0c303018 w 0xc458sudo busybox devmem 0x0c303010 w 0xc400sudo busybox devmem 0x0c303008 w 0">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic.yupi.icu/1/image-20240717135849951.png">
+<meta property="article:published_time" content="2025-12-19T12:48:53.283Z">
+<meta property="article:modified_time" content="2025-12-19T13:31:16.221Z">
+<meta property="article:author" content="小陈">
+<meta property="article:tag" content="融合建图（轮式里程计）">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic.yupi.icu/1/image-20240717135849951.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "智驾学习",
+  "url": "http://ctao7976.github.io/2025/12/19/%E9%9B%B7%E8%BE%BE%E7%9B%B8%E6%9C%BA%E8%9E%8D%E5%90%88%E5%BB%BA%E5%9B%BE/",
+  "image": "https://pic.yupi.icu/1/image-20240717135849951.png",
+  "datePublished": "2025-12-19T12:48:53.283Z",
+  "dateModified": "2025-12-19T13:31:16.221Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "小陈",
+      "url": "http://ctao7976.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/touxiang.jfif"><link rel="canonical" href="http://ctao7976.github.io/2025/12/19/%E9%9B%B7%E8%BE%BE%E7%9B%B8%E6%9C%BA%E8%9E%8D%E5%90%88%E5%BB%BA%E5%9B%BE/index.html"><link rel="preconnect" href="//unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '智驾学习',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/gundong.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/touxiang.jfif" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://pic.yupi.icu/1/image-20240717135849951.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">小陈的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">智驾学习</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">智驾学习</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-19T12:48:53.283Z" title="发表于 2025-12-19 20:48:53">2025-12-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-19T13:31:16.221Z" title="更新于 2025-12-19 21:31:16">2025-12-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%99%BA%E9%A9%BE-%E8%9E%8D%E5%90%88%E5%BB%BA%E5%9B%BE/">智驾-融合建图</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="雷达相机融合建图-RTAB-Map"><a href="#雷达相机融合建图-RTAB-Map" class="headerlink" title="雷达相机融合建图 - RTAB-Map"></a>雷达相机融合建图 - RTAB-Map</h1><h2 id="1、轮式里程计"><a href="#1、轮式里程计" class="headerlink" title="1、轮式里程计"></a>1、轮式里程计</h2><h3 id="每次启动底盘前都执行一下"><a href="#每次启动底盘前都执行一下" class="headerlink" title="每次启动底盘前都执行一下"></a>每次启动底盘前都执行一下</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> install/setup.bash</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> busybox devmem 0x0c303018 w 0xc458</span><br><span class="line"><span class="built_in">sudo</span> busybox devmem 0x0c303010 w 0xc400</span><br><span class="line"><span class="built_in">sudo</span> busybox devmem 0x0c303008 w 0xc458</span><br><span class="line"><span class="built_in">sudo</span> busybox devmem 0x0c303000 w 0xc400</span><br><span class="line"><span class="built_in">sudo</span> modprobe can</span><br><span class="line"><span class="built_in">sudo</span> modprobe can_raw</span><br><span class="line"><span class="built_in">sudo</span> modprobe mttcan</span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭can0</span></span><br><span class="line"><span class="built_in">sudo</span> ip <span class="built_in">link</span> <span class="built_in">set</span> down can0</span><br><span class="line"><span class="comment"># 启动，bitrate 500000 表示将 can0 接口的比特率设置为 500 kbps</span></span><br><span class="line"><span class="built_in">sudo</span> ip <span class="built_in">link</span> <span class="built_in">set</span> can0 <span class="built_in">type</span> can bitrate 500000</span><br><span class="line"><span class="comment"># 打开can0</span></span><br><span class="line"><span class="built_in">sudo</span> ip <span class="built_in">link</span> <span class="built_in">set</span> up can0</span><br></pre></td></tr></table></figure>
+
+<h3 id="启动底盘节点"><a href="#启动底盘节点" class="headerlink" title="启动底盘节点"></a>启动底盘节点</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ros2 run car_cmd_interface car_cmd_interface_node</span><br></pre></td></tr></table></figure>
+
+<h3 id="启动轮式里程计"><a href="#启动轮式里程计" class="headerlink" title="启动轮式里程计"></a>启动轮式里程计</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 wheel_odometry_node.py</span><br></pre></td></tr></table></figure>
+
+<h3 id="测试距离，查看行走的真实距离是否和终端打印的是否一致"><a href="#测试距离，查看行走的真实距离是否和终端打印的是否一致" class="headerlink" title="测试距离，查看行走的真实距离是否和终端打印的是否一致"></a>测试距离，查看行走的真实距离是否和终端打印的是否一致</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ros2 interface show car_msg/msg/VehicleState</span><br><span class="line">ros2 topic <span class="built_in">echo</span> /wheel_odom | grep -A 3 <span class="string">&quot;position&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="轮式里程计和imu融合发布-odom"><a href="#轮式里程计和imu融合发布-odom" class="headerlink" title="轮式里程计和imu融合发布&#x2F;odom"></a>轮式里程计和imu融合发布&#x2F;odom</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ros2 launch orin_launch ekf_localization.launch.py</span><br></pre></td></tr></table></figure>
+
+<h2 id="2、启动rtabmap启动节点"><a href="#2、启动rtabmap启动节点" class="headerlink" title="2、启动rtabmap启动节点"></a>2、启动rtabmap启动节点</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ros2 launch rtabmap_launch rtabmap.launch.py   stereo:=<span class="literal">false</span> localization:=<span class="literal">false</span>   icp_odometry:=<span class="literal">false</span> visual_odometry:=<span class="literal">false</span>   depth:=<span class="literal">false</span>   subscribe_rgb:=<span class="literal">true</span>   subscribe_rgbd:=<span class="literal">false</span>   rgb_topic:=/sync/img   camera_info_topic:=/camera_info   subscribe_scan:=<span class="literal">false</span>   subscribe_scan_cloud:=<span class="literal">true</span>   scan_cloud_topic:=/sync/lidar   frame_id:=base_link   odom_topic:=/odom   use_sim_time:=<span class="literal">true</span>   qos:=2 approx_sync:=<span class="literal">true</span>   rtabmap_viz:=<span class="literal">true</span> rviz:=<span class="literal">true</span>   rtabmap_args:=<span class="string">&quot;--Reg/Strategy 1 --Icp/VoxelSize 0.05&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="3、查看生成的db文件"><a href="#3、查看生成的db文件" class="headerlink" title="3、查看生成的db文件"></a>3、查看生成的db文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rtabmap-databaseViewer ~/.ros/rtabmap.db</span><br></pre></td></tr></table></figure>
+<p>注：直接可以导出所需的pcd文件和pgm栅格地图</p>
+<h2 id="实验过程图如下"><a href="#实验过程图如下" class="headerlink" title="实验过程图如下"></a>实验过程图如下</h2><p><img src="https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAENdjJpRU2sYZBQM8TZF9sUGPNI8JoJxAACZyQAAjgIMFaLbMrmAV4XJzYE.png" alt="融合过程图.png"></p>
+<p><img src="https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAENdjRpRU2uXxHy9XbNVwmLM3GHseF3KwACaSQAAjgIMFaKTHwjJFUw1DYE.png" alt="pgm栅格地图.png"></p>
+<p><img src="https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAENdjdpRU24KDKfff61NGERxdBlllP6VAACbCQAAjgIMFYnteLM0b8DGTYE.png" alt="数据库查看.png"></p>
+<p><img src="https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAENdjhpRU280OIOJM6lyKZhW9cwAxAsPQACbSQAAjgIMFZnKDg13vzK0TYE.png" alt="带视觉.png"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://ctao7976.github.io">小陈</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://ctao7976.github.io/2025/12/19/%E9%9B%B7%E8%BE%BE%E7%9B%B8%E6%9C%BA%E8%9E%8D%E5%90%88%E5%BB%BA%E5%9B%BE/">http://ctao7976.github.io/2025/12/19/%E9%9B%B7%E8%BE%BE%E7%9B%B8%E6%9C%BA%E8%9E%8D%E5%90%88%E5%BB%BA%E5%9B%BE/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://ctao7976.github.io" target="_blank">小陈的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%9E%8D%E5%90%88%E5%BB%BA%E5%9B%BE%EF%BC%88%E8%BD%AE%E5%BC%8F%E9%87%8C%E7%A8%8B%E8%AE%A1%EF%BC%89/">融合建图（轮式里程计）</a></div><div class="post-share"><div class="social-share" data-image="https://pic.yupi.icu/1/image-20240717135849951.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/12/19/%E4%BC%A0%E6%84%9F%E5%99%A8%E6%95%B4%E4%BD%93%E5%A4%96%E5%8F%82tf%E6%A0%91/" title="智驾学习"><img class="cover" src="https://pic.yupi.icu/1/image-20240717135849951.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">智驾学习</div></div><div class="info-2"><div class="info-item-1">imu_link + camera_link + rslidar + base_link1234首先要搞明白base_link是个什么东西，以及怎么想base_link只是一个坐标系，地图定位的坐标原点base_link在odom中最初可以理解为和odom重合的坐标原点在外参标定定义的时候，以这个点（这个点在地上）为基础进行 “造车”  1、相机内参标定（ROS2单目相机标定）教程地址：https://blog.csdn.net/qq_27865227/article/details/123198498 12cd ~/hcj/calibration/image_pipelineros2 run camera_calibration cameracalibrator --size 7x9 --square 0.20 image:=/image_raw camera:=/my_camera 注：这个方法是基于棋盘格的标定方法 2、base_link  -&gt; rslidar10 0 1.0 0 0 0  3、雷达和imu   rslidar  -&gt;  imu_link10....</div></div></div></a><a class="pagination-related" href="/2025/12/19/%E5%A4%96%E5%8F%82%E6%A0%87%E5%AE%9A/" title="智驾学习"><img class="cover" src="https://pic.yupi.icu/1/image-20240717135849951.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">智驾学习</div></div><div class="info-2"><div class="info-item-1">雷达相机外参标定 - direct_visual_lidar_calibration1、录同步数据12345678910source install/setup.bashros2 run camera_driver camera_pub_nodesource install/setup.bashros2 launch rslidar_sdk start.pysource install/setup.bashros2 run sys_time sync_noderos2 bag record /sync/lidar /sync/img/compressed /camera_info 注：录得场景尽可能特征点多，多录几个角度 3、处理数据1234567ros2 run direct_visual_lidar_calibration preprocess \  /home/nvidia/auto_driving/bag0 \  /home/nvidia/auto_driving/bag0_pre_v2 \  -adv \  --image_topic /sync/img/compres...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/touxiang.jfif" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">小陈</div><div class="author-info-description">一个爱记录的博主</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9B%B7%E8%BE%BE%E7%9B%B8%E6%9C%BA%E8%9E%8D%E5%90%88%E5%BB%BA%E5%9B%BE-RTAB-Map"><span class="toc-number">1.</span> <span class="toc-text">雷达相机融合建图 - RTAB-Map</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E8%BD%AE%E5%BC%8F%E9%87%8C%E7%A8%8B%E8%AE%A1"><span class="toc-number">1.1.</span> <span class="toc-text">1、轮式里程计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AF%8F%E6%AC%A1%E5%90%AF%E5%8A%A8%E5%BA%95%E7%9B%98%E5%89%8D%E9%83%BD%E6%89%A7%E8%A1%8C%E4%B8%80%E4%B8%8B"><span class="toc-number">1.1.1.</span> <span class="toc-text">每次启动底盘前都执行一下</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E5%BA%95%E7%9B%98%E8%8A%82%E7%82%B9"><span class="toc-number">1.1.2.</span> <span class="toc-text">启动底盘节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E8%BD%AE%E5%BC%8F%E9%87%8C%E7%A8%8B%E8%AE%A1"><span class="toc-number">1.1.3.</span> <span class="toc-text">启动轮式里程计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E8%B7%9D%E7%A6%BB%EF%BC%8C%E6%9F%A5%E7%9C%8B%E8%A1%8C%E8%B5%B0%E7%9A%84%E7%9C%9F%E5%AE%9E%E8%B7%9D%E7%A6%BB%E6%98%AF%E5%90%A6%E5%92%8C%E7%BB%88%E7%AB%AF%E6%89%93%E5%8D%B0%E7%9A%84%E6%98%AF%E5%90%A6%E4%B8%80%E8%87%B4"><span class="toc-number">1.1.4.</span> <span class="toc-text">测试距离，查看行走的真实距离是否和终端打印的是否一致</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AE%E5%BC%8F%E9%87%8C%E7%A8%8B%E8%AE%A1%E5%92%8Cimu%E8%9E%8D%E5%90%88%E5%8F%91%E5%B8%83-odom"><span class="toc-number">1.1.5.</span> <span class="toc-text">轮式里程计和imu融合发布&#x2F;odom</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E5%90%AF%E5%8A%A8rtabmap%E5%90%AF%E5%8A%A8%E8%8A%82%E7%82%B9"><span class="toc-number">1.2.</span> <span class="toc-text">2、启动rtabmap启动节点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E6%9F%A5%E7%9C%8B%E7%94%9F%E6%88%90%E7%9A%84db%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">3、查看生成的db文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E8%BF%87%E7%A8%8B%E5%9B%BE%E5%A6%82%E4%B8%8B"><span class="toc-number">1.4.</span> <span class="toc-text">实验过程图如下</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/12/19/%E4%BC%A0%E6%84%9F%E5%99%A8%E6%95%B4%E4%BD%93%E5%A4%96%E5%8F%82tf%E6%A0%91/" title="智驾学习"><img src="https://pic.yupi.icu/1/image-20240717135849951.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="智驾学习"/></a><div class="content"><a class="title" href="/2025/12/19/%E4%BC%A0%E6%84%9F%E5%99%A8%E6%95%B4%E4%BD%93%E5%A4%96%E5%8F%82tf%E6%A0%91/" title="智驾学习">智驾学习</a><time datetime="2025-12-19T13:11:53.710Z" title="发表于 2025-12-19 21:11:53">2025-12-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/19/%E9%9B%B7%E8%BE%BE%E7%9B%B8%E6%9C%BA%E8%9E%8D%E5%90%88%E5%BB%BA%E5%9B%BE/" title="智驾学习"><img src="https://pic.yupi.icu/1/image-20240717135849951.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="智驾学习"/></a><div class="content"><a class="title" href="/2025/12/19/%E9%9B%B7%E8%BE%BE%E7%9B%B8%E6%9C%BA%E8%9E%8D%E5%90%88%E5%BB%BA%E5%9B%BE/" title="智驾学习">智驾学习</a><time datetime="2025-12-19T12:48:53.283Z" title="发表于 2025-12-19 20:48:53">2025-12-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/19/%E5%A4%96%E5%8F%82%E6%A0%87%E5%AE%9A/" title="智驾学习"><img src="https://pic.yupi.icu/1/image-20240717135849951.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="智驾学习"/></a><div class="content"><a class="title" href="/2025/12/19/%E5%A4%96%E5%8F%82%E6%A0%87%E5%AE%9A/" title="智驾学习">智驾学习</a><time datetime="2025-12-19T12:38:14.254Z" title="发表于 2025-12-19 20:38:14">2025-12-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/19/sys_time/" title="智驾学习"><img src="https://pic.yupi.icu/1/image-20240717135849951.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="智驾学习"/></a><div class="content"><a class="title" href="/2025/12/19/sys_time/" title="智驾学习">智驾学习</a><time datetime="2025-12-19T12:23:27.790Z" title="发表于 2025-12-19 20:23:27">2025-12-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/19/ORB_SLAM3/" title="智驾学习"><img src="https://pic.yupi.icu/1/image-20240717135849951.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="智驾学习"/></a><div class="content"><a class="title" href="/2025/12/19/ORB_SLAM3/" title="智驾学习">智驾学习</a><time datetime="2025-12-19T12:10:30.680Z" title="发表于 2025-12-19 20:10:30">2025-12-19</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://pic.yupi.icu/1/image-20240717135849951.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By 小陈</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script defer="defer" id="ribbon" src="https://unpkg.com/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
